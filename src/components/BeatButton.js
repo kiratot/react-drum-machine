@@ -4,7 +4,31 @@ const BeatButton = ({ beat, keyBinding, name, setBeatName }) => {
   const audioRef = useRef();
   const [shadow, setShadow] = useState(null);
   const [style, setStyle] = useState(null);
+  const [toogle, setToogle] = useState(false);
+  const handleClick = () => {
+    if (!toogle) {
+      setBeatName(name);
+      audioRef.current.play();
+      setShadow("1px 1px 1px black inset");
+      setStyle({ backgroundColor: "rgb(176, 160, 230)" });
+      setToogle((prevState) => {
+        return !prevState;
+      });
+    } else {
+      setShadow(null);
+      setBeatName("");
 
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setStyle(null);
+      setToogle((prevState) => {
+        return !prevState;
+      });
+    }
+  };
   const handlePlay = () => {
     setBeatName(name);
     audioRef.current.play();
@@ -32,14 +56,12 @@ const BeatButton = ({ beat, keyBinding, name, setBeatName }) => {
       if (event.key === keyBinding || event.key === keyBinding.toUpperCase()) {
         handlePlay();
       }
-      console.log(`Key : "${event.key}" is DOWN`);
     };
     const onUp = (event) => {
       if (event.key === keyBinding || event.key === keyBinding.toUpperCase()) {
         const playPromise = audioRef.current.play();
         handleStop(playPromise);
       }
-      console.log(`Key : "${event.key}" is UP`);
     };
     window.addEventListener("keydown", onDown);
     window.addEventListener("keyup", onUp);
@@ -55,7 +77,7 @@ const BeatButton = ({ beat, keyBinding, name, setBeatName }) => {
         style={style}
         id={`loop-button-${keyBinding}`}
         className={`drum-pad button-drum-pad`}
-        onMouseDown={handlePlay}
+        onClick={handleClick}
       >
         {keyBinding}
         <audio

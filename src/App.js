@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import BeatButton from "./components/BeatButton";
 import samples from "./SAMPLES/Samples";
@@ -17,6 +17,11 @@ function App() {
       return !on;
     });
   };
+
+  useEffect(() => {
+    if (!on) setBeatName("");
+  }, [on]);
+
   return (
     <div className="App">
       <div id="drum-machine" className=" drum-grid-container" style={shadow}>
